@@ -3,6 +3,8 @@ package xyz.ralul.chessfx.piece;
 import javafx.scene.image.ImageView;
 import xyz.ralul.chessfx.ChessPieceType;
 
+import java.util.List;
+
 public abstract class Piece {
     private boolean isWhite;
     private int row;
@@ -15,6 +17,11 @@ public abstract class Piece {
         this.isWhite = isWhite;
         this.row = row;
         this.col = col;
+        this.type = type;
+        this.isCatchable = isCatchable;
+    }
+    public Piece(boolean isWhite, ChessPieceType type, boolean isCatchable) {
+        this.isWhite = isWhite;
         this.type = type;
         this.isCatchable = isCatchable;
     }
@@ -55,13 +62,13 @@ public abstract class Piece {
         return getType().getImageView(isWhite);
     }
 
-    public abstract int[][] getValidMoves(); //Todo add all rules and maybe seperat add cathces
+    public abstract List<Integer[]> getValidMoves(); //Todo add all rules and maybe seperat add cathces
 
     public boolean isValidMove(int row, int col) {
-        int[][] validMoves = getValidMoves();
+        List<Integer[]> validMoves = getValidMoves();
 
-        for (int i = 0; i < validMoves.length; i++) {
-            if (validMoves[i][0] == row && validMoves[i][1] == col) {
+        for (int i = 0; i < validMoves.size(); i++) {
+            if (validMoves.get(i)[0] == row && validMoves.get(i)[1] == col) {
                 return true;
             }
         }

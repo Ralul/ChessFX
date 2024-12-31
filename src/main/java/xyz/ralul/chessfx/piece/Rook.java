@@ -2,6 +2,8 @@ package xyz.ralul.chessfx.piece;
 
 import xyz.ralul.chessfx.ChessPieceType;
 
+import java.util.List;
+
 public class Rook extends Piece {
 
     public Rook(boolean isWhite, int row, int col, ChessPieceType type) {
@@ -9,8 +11,8 @@ public class Rook extends Piece {
     }
 
     @Override
-    public int[][] getValidMoves() {
-        return new int[0][];
+    public List<Integer[]> getValidMoves() {
+        return null;
     }
 
 }

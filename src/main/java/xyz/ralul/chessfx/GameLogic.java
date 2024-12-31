@@ -14,8 +14,9 @@ public class GameLogic {
     public static void initializeGame() {
         board = new Board();
 
-        board.setPiece(3, 3, new Pawn(true,3,3));
-        board.setPiece(2, 4, new Pawn(false,2,4));
+        board.setPiece(1, 1, new Pawn(true));
+        board.setPiece(6, 6, new Pawn(false));
+        //Todo also
 
         //Todo add a fen loader
 

@@ -15,6 +15,10 @@ public class Board {
 
     public void setPiece(int row, int col, Piece piece) {
         board[row][col] = piece;
+        if(piece != null) {
+            piece.setRow(row);
+            piece.setCol(col);
+        }
     }
 
     public void movePiece(int startRow, int startCol, int endRow, int endCol) {

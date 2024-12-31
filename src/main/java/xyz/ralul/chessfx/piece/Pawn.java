@@ -2,25 +2,29 @@ package xyz.ralul.chessfx.piece;
 
 import xyz.ralul.chessfx.ChessPieceType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Pawn extends Piece {
 
-    public Pawn(boolean isWhite, int row, int col) {
-        super(isWhite, row, col, ChessPieceType.PAWN,true);
+    public Pawn(boolean isWhite) {
+        super(isWhite, ChessPieceType.PAWN, true);
     }
 
     @Override
-    public int[][] getValidMoves() {
-
+    public List<Integer[]> getValidMoves() {
+        List<Integer[]> moves = new ArrayList<>();
         int direction = this.isWhite() ? 1 : -1;
 
         int startCol = this.getCol();
         int startRow = this.getRow();
 
-        int endCol = startCol;
-        int endRow = startRow + direction;
+        moves.add(new Integer[]{startRow + direction, startCol});
 
-        int [][] validMoves = {{endRow,endCol}};
+        if ((isWhite() && startRow == 1) || (!isWhite() && startRow == 6)) {
+            moves.add(new Integer[]{startRow + (direction * 2), startCol});
+        }
 
-        return validMoves;
+        return moves;
     }
 }

@@ -2,6 +2,8 @@ package xyz.ralul.chessfx.piece;
 
 import xyz.ralul.chessfx.ChessPieceType;
 
+import java.util.List;
+
 public class Knight extends Piece {
 
     public Knight(boolean isWhite, int row, int col) {
@@ -9,7 +11,7 @@ public class Knight extends Piece {
     }
 
     @Override
-    public int[][] getValidMoves() {
-        return new int[0][];
+    public List<Integer[]> getValidMoves() {
+        return null;
     }
 }
