@@ -13,13 +13,7 @@ public class GameLogic {
 
     public static void initializeGame() {
         board = new Board();
-
-        board.setPiece(1, 1, new Pawn(true));
-        board.setPiece(6, 6, new Pawn(false));
-        //Todo also
-
-        //Todo add a fen loader
-
+        board = FenLoader.loadFen(board,"rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR");
     }
 
     public static void handleCellClick(int row, int col) {

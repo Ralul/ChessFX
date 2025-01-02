@@ -64,6 +64,8 @@ public abstract class Piece {
 
     public abstract List<Integer[]> getValidMoves(); //Todo add all rules and maybe seperat add cathces
 
+    public abstract List<Integer[]> getValidCatches();
+
     public boolean isValidMove(int row, int col) {
         List<Integer[]> validMoves = getValidMoves();
 
@@ -72,6 +74,14 @@ public abstract class Piece {
                 return true;
             }
         }
+
+        List<Integer[]> validCatches = getValidCatches();
+        for (int i = 0; i < validCatches.size(); i++) {
+            if (validCatches.get(i)[0] == row && validCatches.get(i)[1] == col) {
+                return true;
+            }
+        }
+
         return false;
     }
 

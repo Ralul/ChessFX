@@ -6,12 +6,17 @@ import java.util.List;
 
 public class Knight extends Piece {
 
-    public Knight(boolean isWhite, int row, int col) {
-        super(isWhite,row,col, ChessPieceType.KNIGHT,true);
+    public Knight(boolean isWhite) {
+        super(isWhite, ChessPieceType.KNIGHT,true);
     }
 
     @Override
     public List<Integer[]> getValidMoves() {
         return null;
+    }
+
+    @Override
+    public List<Integer[]> getValidCatches() {
+        return List.of();
     }
 }
