@@ -1,6 +1,5 @@
 package xyz.ralul.chessfx;
 
-import xyz.ralul.chessfx.piece.Pawn;
 import xyz.ralul.chessfx.piece.Piece;
 
 public class Board {

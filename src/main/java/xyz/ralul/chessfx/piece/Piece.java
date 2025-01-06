@@ -62,7 +62,7 @@ public abstract class Piece {
         return getType().getImageView(isWhite);
     }
 
-    public abstract List<Integer[]> getValidMoves(); //Todo add all rules and maybe seperat add cathces
+    public abstract List<Integer[]> getValidMoves();
 
     public abstract List<Integer[]> getValidCatches();
 
@@ -81,7 +81,19 @@ public abstract class Piece {
                 return true;
             }
         }
+        return false;
+    }
 
+    public boolean isCatchbleBy(Piece opponent) {
+        if (opponent == null) {
+            return false;
+        }
+
+        if(opponent.isWhite() != isWhite) {
+            if(isCatchable) {
+                return true;
+            }
+        }
         return false;
     }
 

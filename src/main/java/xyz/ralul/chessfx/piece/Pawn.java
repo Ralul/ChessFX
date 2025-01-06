@@ -12,7 +12,6 @@ public class Pawn extends Piece {
         super(isWhite, ChessPieceType.PAWN, true);
     }
 
-    @Override
     public List<Integer[]> getValidMoves() {
         List<Integer[]> moves = new ArrayList<>();
         int direction = this.isWhite() ? -1 : 1;
@@ -20,12 +19,15 @@ public class Pawn extends Piece {
         int startRow = this.getRow();
         int startCol = this.getCol();
 
-        moves.add(new Integer[]{startRow + direction, startCol});
-
-        if ((isWhite() && startRow == 6) || (!isWhite() && startRow == 1)) {
-            moves.add(new Integer[]{startRow + (direction * 2), startCol});
+        if (GameLogic.getBoard().getPiece(startRow + direction, startCol) == null) {
+            moves.add(new Integer[]{startRow + direction, startCol});
         }
 
+        if ((isWhite() && startRow == 6) || (!isWhite() && startRow == 1)) {
+            if (GameLogic.getBoard().getPiece(startRow + (direction * 2), startCol) == null) {
+                moves.add(new Integer[]{startRow + (direction * 2), startCol});
+            }
+        }
         return moves;
     }
 
@@ -40,7 +42,8 @@ public class Pawn extends Piece {
         for (int direction : colDirections) {
             int catchRow = startRow + rowDirection;
             int catchCol = startCol + direction;
-            if (GameLogic.getBoard().getPiece(catchRow, catchCol) != null) {
+            Piece targetPiece = GameLogic.getBoard().getPiece(catchRow, catchCol);
+            if (targetPiece != null && targetPiece.isCatchbleBy(this)) {
                 catches.add(new Integer[]{catchRow, catchCol});
             }
         }

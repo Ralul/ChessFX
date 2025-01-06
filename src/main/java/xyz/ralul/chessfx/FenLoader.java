@@ -20,7 +20,7 @@ public class FenLoader {
                             board.setPiece(row,col, new Bishop(false));
                             break;
                         case 'k':
-                            board.setPiece(row,col, new Bishop(false));
+                            board.setPiece(row,col, new King(false));
                             break;
                         case 'n':
                             board.setPiece(row,col, new Knight(false));
@@ -40,7 +40,7 @@ public class FenLoader {
                             board.setPiece(row,col, new Bishop(true));
                             break;
                         case 'K':
-                            board.setPiece(row,col, new Bishop(true));
+                            board.setPiece(row,col, new King(true));
                             break;
                         case 'N':
                             board.setPiece(row,col, new Knight(true));
