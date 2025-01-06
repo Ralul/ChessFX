@@ -13,8 +13,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        GameLogic.initializeGame();
+        Board board = new Board();
         BoardView boardView = new BoardView();
+        board.loadFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+
+        GameController controller = new GameController(board, boardView);
 
         Scene scene = new Scene(boardView.getGridPane());
         stage.setScene(scene);

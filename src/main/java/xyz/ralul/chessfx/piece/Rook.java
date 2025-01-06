@@ -1,7 +1,7 @@
 package xyz.ralul.chessfx.piece;
 
 import xyz.ralul.chessfx.ChessPieceType;
-import xyz.ralul.chessfx.GameLogic;
+import xyz.ralul.chessfx.GameController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class Rook extends Piece {
                     break;
                 }
 
-                Piece targetPiece = GameLogic.getBoard().getPiece(currentRow, currentCol);
+                Piece targetPiece = GameController.getBoard().getPiece(currentRow, currentCol);
                 if (targetPiece == null) {
                     moves.add(new Integer[]{currentRow, currentCol});
                 } else {
@@ -64,7 +64,7 @@ public class Rook extends Piece {
                     valid = false;
                 }
 
-                Piece targetPiece = GameLogic.getBoard().getPiece(currentRow, currentCol);
+                Piece targetPiece = GameController.getBoard().getPiece(currentRow, currentCol);
                 if (targetPiece != null && targetPiece.isCatchbleBy(this)) {
                     catches.add(new Integer[]{currentRow, currentCol});
                 }

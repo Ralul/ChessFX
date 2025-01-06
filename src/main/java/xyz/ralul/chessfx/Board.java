@@ -1,6 +1,6 @@
 package xyz.ralul.chessfx;
 
-import xyz.ralul.chessfx.piece.Piece;
+import xyz.ralul.chessfx.piece.*;
 
 public class Board {
     private Piece[][] board = new Piece[8][8];
@@ -25,5 +25,62 @@ public class Board {
         piece.setPos(endRow, endCol);
         setPiece(endRow, endCol, piece);
         setPiece(startRow, startCol, null);
+    }
+
+    public void loadFen(String fen) {
+        String[] fenParts = fen.split("/");
+
+        for (int row = 0; row < 8; row++) {
+            int col = 0;
+            for (int i = 0; i < fenParts[row].length(); i++) {
+                char fenChar = fenParts[row].charAt(i);
+                if (Character.isDigit(fenChar)) {
+                    col += fenChar - '0' - 1;
+                } else {
+                    switch (fenChar) {
+                        //Black Piece
+                        case 'b':
+                            setPiece(row, col, new Bishop(false));
+                            break;
+                        case 'k':
+                            setPiece(row, col, new King(false));
+                            break;
+                        case 'n':
+                            setPiece(row, col, new Knight(false));
+                            break;
+                        case 'p':
+                            setPiece(row, col, new Pawn(false));
+                            break;
+                        case 'q':
+                            setPiece(row, col, new Queen(false));
+                            break;
+                        case 'r':
+                            setPiece(row, col, new Rook(false));
+                            break;
+
+                        //White Piece
+                        case 'B':
+                            setPiece(row, col, new Bishop(true));
+                            break;
+                        case 'K':
+                            setPiece(row, col, new King(true));
+                            break;
+                        case 'N':
+                            setPiece(row, col, new Knight(true));
+                            break;
+                        case 'P':
+                            setPiece(row, col, new Pawn(true));
+                            break;
+                        case 'Q':
+                            setPiece(row, col, new Queen(true));
+                            break;
+                        case 'R':
+                            setPiece(row, col, new Rook(true));
+                            break;
+                    }
+                }
+                col++;
+            }
+        }
     }
 }
