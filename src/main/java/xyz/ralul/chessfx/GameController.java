@@ -15,7 +15,6 @@ public class GameController {
     private static boolean validEndPosition = false;
     private static boolean playerIsWhite = true;
 
-
     public GameController(Board board, BoardView boardView) {
         this.board = board;
         this.boardView = boardView;
