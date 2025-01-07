@@ -3,7 +3,6 @@ package xyz.ralul.chessfx.piece;
 import xyz.ralul.chessfx.ChessPieceType;
 import xyz.ralul.chessfx.GameController;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,11 +23,15 @@ public class Pawn extends Piece {
             moves.add(new Integer[]{startRow + direction, startCol});
         }
 
-        if ((isWhite() && startRow == 6) || (!isWhite() && startRow == 1)) {
-            if (GameController.getBoard().getPiece(startRow + (direction * 2), startCol) == null) {
-                moves.add(new Integer[]{startRow + (direction * 2), startCol});
+        //if it First move and pawn is on start
+        if(!isMoved()) {
+            if ((isWhite() && startRow == 6) || (!isWhite() && startRow == 1)) {
+                if (GameController.getBoard().getPiece(startRow + (direction * 2), startCol) == null) {
+                    moves.add(new Integer[]{startRow + (direction * 2), startCol});
+                }
             }
         }
+
         return moves;
     }
 

@@ -23,8 +23,10 @@ public class Board {
     public void movePiece(int startRow, int startCol, int endRow, int endCol) {
         Piece piece = getPiece(startRow, startCol);
         piece.setPos(endRow, endCol);
+        piece.setMoved(true);
         setPiece(endRow, endCol, piece);
         setPiece(startRow, startCol, null);
+
     }
 
     public void loadFen(String fen) {
@@ -78,6 +80,7 @@ public class Board {
                             setPiece(row, col, new Rook(true));
                             break;
                     }
+                    getPiece(row, col).setMoved(false);
                 }
                 col++;
             }

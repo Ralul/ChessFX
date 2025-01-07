@@ -8,6 +8,8 @@ import java.util.List;
 
 public class Rook extends Piece {
 
+    private int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
     public Rook(boolean isWhite) {
         super(isWhite, ChessPieceType.ROOK, true);
     }
@@ -15,7 +17,6 @@ public class Rook extends Piece {
     @Override
     public List<Integer[]> getValidMoves() {
         List<Integer[]> moves = new ArrayList<>();
-        int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}}; // Vertical and Horizontal Directions
 
         int startRow = getRow();
         int startCol = getCol();
@@ -46,7 +47,6 @@ public class Rook extends Piece {
     @Override
     public List<Integer[]> getValidCatches() {
         List<Integer[]> catches = new ArrayList<>();
-        int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}}; // Vertical and Horizontal Directions
 
         int startRow = getRow();
         int startCol = getCol();

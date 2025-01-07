@@ -12,6 +12,16 @@ public abstract class Piece {
     private ChessPieceType type;
     private boolean isCatchable;
 
+    public boolean isMoved() {
+        return isMoved;
+    }
+
+    public void setMoved(boolean moved) {
+        isMoved = moved;
+    }
+
+    private boolean isMoved;
+
 
     public Piece(boolean isWhite, int row, int col , ChessPieceType type, boolean isCatchable) {
         this.isWhite = isWhite;

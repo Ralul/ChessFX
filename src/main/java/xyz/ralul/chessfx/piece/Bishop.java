@@ -8,6 +8,8 @@ import java.util.List;
 
 public class Bishop extends Piece {
 
+    private int[][] directions = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}}; // Diagonal directions
+
     public Bishop(boolean isWhite) {
         super(isWhite, ChessPieceType.BISHOP, true);
     }
@@ -15,7 +17,6 @@ public class Bishop extends Piece {
     @Override
     public List<Integer[]> getValidMoves() {
         List<Integer[]> moves = new ArrayList<>();
-        int[][] directions = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}}; // Diagonal directions
 
         int startRow = getRow();
         int startCol = getCol();
@@ -46,7 +47,6 @@ public class Bishop extends Piece {
     @Override
     public List<Integer[]> getValidCatches() {
         List<Integer[]> catches = new ArrayList<>();
-        int[][] directions = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}}; // Diagonal directions
 
         int startRow = getRow();
         int startCol = getCol();
