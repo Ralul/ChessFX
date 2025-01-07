@@ -2,6 +2,9 @@ package xyz.ralul.chessfx;
 
 import xyz.ralul.chessfx.piece.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Board {
     private Piece[][] board = new Piece[8][8];
 
@@ -28,6 +31,35 @@ public class Board {
         setPiece(startRow, startCol, null);
 
     }
+
+    public int[] getKing(boolean isWhite) {
+        for (int row = 0; row < board.length; row++) {
+            for (int col = 0; col < board[row].length; col++) {
+                if (getPiece(row, col) != null) {
+                    if (getPiece(row, col).isWhite() == isWhite && getPiece(row, col).getType() == ChessPieceType.KING) {
+                        return new int[]{row, col};
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public List<Integer[]> getAllPieces(boolean isWhite) {
+        List<Integer[]> allPieces = new ArrayList<Integer[]>();
+
+        for (int row = 0; row < board.length; row++) {
+            for (int col = 0; col < board[row].length; col++) {
+                if (getPiece(row, col) != null) {
+                    if (getPiece(row, col).isWhite() == isWhite) {
+                        allPieces.add(new Integer[]{row, col});
+                    }
+                }
+            }
+        }
+        return allPieces;
+    }
+
 
     public void loadFen(String fen) {
         String[] fenParts = fen.split("/");

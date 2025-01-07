@@ -1,9 +1,9 @@
 package xyz.ralul.chessfx.piece;
 
-import javafx.scene.image.ImageView;
 import xyz.ralul.chessfx.ChessPieceType;
 import xyz.ralul.chessfx.GameController;
 
+import javafx.scene.image.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,14 +92,15 @@ public abstract class Piece {
         return false;
     }
 
-    public List<Integer[]> getMovesByDirections(int[][] directions,boolean kingIsCapture) {
-        List<Integer[]> PiecesInRange = new ArrayList<>();
+    public List<Integer[]> getMovesByDirections(int[][] directions,boolean isSliding, boolean kingIsCapture) {
+        List<Integer[]> piecesInRange = new ArrayList<>();
         int startRow = getRow();
         int startCol = getCol();
 
         for (int[] direction : directions) {
             int currentRow = startRow;
             int currentCol = startCol;
+
 
             while (true) {
                 currentRow += direction[0];
@@ -111,12 +112,16 @@ public abstract class Piece {
 
                 Piece targetPiece = GameController.getBoard().getPiece(currentRow, currentCol);
                 if (targetPiece == null || targetPiece.isCatchbleBy(this,kingIsCapture)) {
-                    PiecesInRange.add(new Integer[]{currentRow, currentCol});
+                    piecesInRange.add(new Integer[]{currentRow, currentCol});
                 } else {
+                    break;
+                }
+
+                if(!isSliding) {
                     break;
                 }
             }
         }
-        return PiecesInRange;
+        return piecesInRange;
     }
 }

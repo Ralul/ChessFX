@@ -1,9 +1,7 @@
 package xyz.ralul.chessfx.piece;
 
 import xyz.ralul.chessfx.ChessPieceType;
-import xyz.ralul.chessfx.GameController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Knight extends Piece {
@@ -16,7 +14,7 @@ public class Knight extends Piece {
 
     @Override
     public List<Integer[]> getValidMoves(boolean kingIsCapture) {
-        List<Integer[]> PiecesInRange = getMovesByDirections(directions, kingIsCapture);
+        List<Integer[]> PiecesInRange = getMovesByDirections(directions, false, kingIsCapture);
 
         return PiecesInRange;
     }

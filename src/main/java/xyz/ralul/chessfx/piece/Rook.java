@@ -16,7 +16,7 @@ public class Rook extends Piece {
 
     @Override
     public List<Integer[]> getValidMoves(boolean kingIsCapture) {
-        List<Integer[]> PiecesInRange = getMovesByDirections(directions, kingIsCapture);
+        List<Integer[]> PiecesInRange = getMovesByDirections(directions, true, kingIsCapture);
 
         return PiecesInRange;
     }
