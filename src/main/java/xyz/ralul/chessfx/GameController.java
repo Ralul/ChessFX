@@ -39,7 +39,7 @@ public class GameController {
         }
 
         if (validEndPosition && validStartPosition) {
-            if (board.getPiece(startRow, startCol).isValidMove(endRow, endCol)) {
+            if (board.getPiece(startRow, startCol).isValidMove(endRow, endCol,false)) {
                 System.out.println("GameLogic valid ending position");
                 board.movePiece(startRow, startCol, endRow, endCol);
                 validStartPosition = false;
@@ -49,7 +49,6 @@ public class GameController {
             }
         }
     }
-
     private void updateView() {
         boardView.renderBoard(board);
     }

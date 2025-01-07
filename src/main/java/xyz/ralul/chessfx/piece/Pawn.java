@@ -12,29 +12,6 @@ public class Pawn extends Piece {
         super(isWhite, ChessPieceType.PAWN, true);
     }
 
-    public List<Integer[]> getValidMoves() {
-        List<Integer[]> moves = new ArrayList<>();
-        int direction = this.isWhite() ? -1 : 1;
-
-        int startRow = this.getRow();
-        int startCol = this.getCol();
-
-        if (GameController.getBoard().getPiece(startRow + direction, startCol) == null) {
-            moves.add(new Integer[]{startRow + direction, startCol});
-        }
-
-        //if it First move and pawn is on start
-        if(!isMoved()) {
-            if ((isWhite() && startRow == 6) || (!isWhite() && startRow == 1)) {
-                if (GameController.getBoard().getPiece(startRow + (direction * 2), startCol) == null) {
-                    moves.add(new Integer[]{startRow + (direction * 2), startCol});
-                }
-            }
-        }
-
-        return moves;
-    }
-
     public List<Integer[]> getValidCatches() {
         List<Integer[]> catches = new ArrayList<>();
         int rowDirection = this.isWhite() ? -1 : 1;
@@ -47,10 +24,42 @@ public class Pawn extends Piece {
             int catchRow = startRow + rowDirection;
             int catchCol = startCol + direction;
             Piece targetPiece = GameController.getBoard().getPiece(catchRow, catchCol);
-            if (targetPiece != null && targetPiece.isCatchbleBy(this)) {
+            if (targetPiece != null && targetPiece.isCatchbleBy(this, false)) {
                 catches.add(new Integer[]{catchRow, catchCol});
             }
         }
         return catches;
+    }
+
+    @Override
+    public List<Integer[]> getValidMoves(boolean kingIsCapture) {
+        List<Integer[]> moves = new ArrayList<>();
+        int rowDirection = this.isWhite() ? -1 : 1;
+
+        int startRow = this.getRow();
+        int startCol = this.getCol();
+
+        if (GameController.getBoard().getPiece(startRow + rowDirection, startCol) == null) {
+            moves.add(new Integer[]{startRow + rowDirection, startCol});
+        }
+        if(!isMoved()) {
+            if ((isWhite() && startRow == 6) || (!isWhite() && startRow == 1)) {
+                if (GameController.getBoard().getPiece(startRow + (rowDirection * 2), startCol) == null) {
+                    moves.add(new Integer[]{startRow + (rowDirection * 2), startCol});
+                }
+            }
+        }
+
+        int[] colDirections = {1, -1};
+
+        for (int direction : colDirections) {
+            int catchRow = startRow + rowDirection;
+            int catchCol = startCol + direction;
+            Piece targetPiece = GameController.getBoard().getPiece(catchRow, catchCol);
+            if (targetPiece != null && targetPiece.isCatchbleBy(this, kingIsCapture)) {
+                moves.add(new Integer[]{catchRow, catchCol});
+            }
+        }
+        return moves;
     }
 }
