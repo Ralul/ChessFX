@@ -12,25 +12,6 @@ public class Pawn extends Piece {
         super(isWhite, ChessPieceType.PAWN, true);
     }
 
-    public List<Integer[]> getValidCatches() {
-        List<Integer[]> catches = new ArrayList<>();
-        int rowDirection = this.isWhite() ? -1 : 1;
-        int[] colDirections = {1, -1};
-
-        int startRow = this.getRow();
-        int startCol = this.getCol();
-
-        for (int direction : colDirections) {
-            int catchRow = startRow + rowDirection;
-            int catchCol = startCol + direction;
-            Piece targetPiece = GameController.getBoard().getPiece(catchRow, catchCol);
-            if (targetPiece != null && targetPiece.isCatchbleBy(this, false)) {
-                catches.add(new Integer[]{catchRow, catchCol});
-            }
-        }
-        return catches;
-    }
-
     @Override
     public List<Integer[]> getValidMoves(boolean kingIsCapture) {
         List<Integer[]> moves = new ArrayList<>();
