@@ -1,9 +1,6 @@
 package xyz.ralul.chessfx;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GameController {
 
@@ -33,38 +30,51 @@ public class GameController {
     }
 
     public static void updateValidMoves() {
+
+        /*
+        How to find all valid Moves:
+        1. Find All own pieces
+        2. Calculate all possible moves without considering their legality
+        3. Made All moves on a deep Copy of the board
+        4. Calculate all possible catches for the other player
+        5. If a catch matches with the position of the king the move is not legal
+        */
+
         validMoves.clear();
         int[] posKing = board.getKing(playerIsWhite);
-
-        List<Integer[]> ownPiecesPosition = new ArrayList<>();
-        ownPiecesPosition = board.getAllPieces(playerIsWhite);
-
+        List<Integer[]> ownPiecesPosition = ownPiecesPosition = board.getAllPieces(playerIsWhite);
         Map<Integer[] , List<Integer[]>> ownPiecesPositionWithMoves= new HashMap<Integer[], List<Integer[]>>();
 
         for(int i = 0; i < ownPiecesPosition.size(); i++) {
             ownPiecesPositionWithMoves.put(ownPiecesPosition.get(i),board.getPiece(ownPiecesPosition.get(i)[0], ownPiecesPosition.get(i)[1]).getValidMoves(false));
         }
-        for(int i = 0; i < ownPiecesPosition.size(); i++) {
-            System.out.println(ownPiecesPosition.get(i));
-            for(int j = 0; j < ownPiecesPosition.get(i).length; j++) {
-                System.out.println(ownPiecesPosition.get(i)[j]);
+        for(int i = 0; i < ownPiecesPositionWithMoves.size(); i++) {
+            System.out.println(ownPiecesPositionWithMoves.get(i));
+            for(int j = 0; j < ownPiecesPositionWithMoves.get(i).size(); j++) {
+                System.out.println(Arrays.toString(ownPiecesPositionWithMoves.get(i).get(j)));
                 Board tempBoard = board.clone();
+
+                int startRow = ownPiecesPosition.get(j)[0];
+                int startCol = ownPiecesPosition.get(j)[1];
+                int endRow = ownPiecesPositionWithMoves.get(i).get(j)[0];
+                int endCol = ownPiecesPositionWithMoves.get(i).get(j)[1];
+
+                tempBoard.movePiece(startRow, startCol, endRow, endCol);
+
                 List<Integer[]> otherPieces = tempBoard.getAllPieces(!playerIsWhite);
-                List<Integer[]> posibelCatches = new ArrayList<>();
+
                 for (int k = 0; k < otherPieces.size(); k++) {
-
-                    posibelCatches.add(tempBoard.getPiece(otherPieces.get(k)[0],otherPieces.get(k)[1]).getValidMoves(true));
-
-
+                    List<Integer[]> posibelCatches = tempBoard.getPiece(otherPieces.get(k)[0], otherPieces.get(k)[1]).getValidMoves(true);
+                    for(Integer[] posibelCatch : posibelCatches) {
+                        if(posKing[0] == posibelCatch[0] && posKing[1] == posibelCatch[1]) {
+                            ownPiecesPositionWithMoves.get(i).remove(j);
+                            break;
+                        }
+                    }
                 }
-
+                
             }
         }
-
-
-
-
-
 
         //Move all pices and show if an enemy piec can capture the own king
         //But first create an copy of board to perform the move
@@ -91,13 +101,8 @@ public class GameController {
         if (validEndPosition && validStartPosition) {
             movePiece();
         }
-
-
-
         int[] kingPos = board.getKing(playerIsWhite);
         System.out.println("row: "+ kingPos[0]+ "| col: " + kingPos[1]);
-
-
     }
 
     private void movePiece(){
@@ -112,8 +117,6 @@ public class GameController {
             updateView();
         }
     }
-
-
 
     private void updateView() {
         boardView.renderBoard(board);
