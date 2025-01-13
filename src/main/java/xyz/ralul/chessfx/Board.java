@@ -5,7 +5,7 @@ import xyz.ralul.chessfx.piece.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Board {
+public class Board implements Cloneable {
     private Piece[][] board = new Piece[8][8];
 
     public Piece getPiece(int row, int col) {
@@ -116,6 +116,23 @@ public class Board {
                 }
                 col++;
             }
+        }
+    }
+
+    @Override
+    public Board clone() {
+        try {
+            Board clone = (Board) super.clone();
+            for(int row = 0; row < 8; row++) {
+                for(int col = 0; col < 8; col++) {
+                    if (getPiece(row, col) != null) {
+                        clone.board[row][col] = (Piece) board[row][col].clone();
+                    }
+                }
+            }
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
         }
     }
 }

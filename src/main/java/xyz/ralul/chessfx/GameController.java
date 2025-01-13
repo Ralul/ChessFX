@@ -44,6 +44,26 @@ public class GameController {
         for(int i = 0; i < ownPiecesPosition.size(); i++) {
             ownPiecesPositionWithMoves.put(ownPiecesPosition.get(i),board.getPiece(ownPiecesPosition.get(i)[0], ownPiecesPosition.get(i)[1]).getValidMoves(false));
         }
+        for(int i = 0; i < ownPiecesPosition.size(); i++) {
+            System.out.println(ownPiecesPosition.get(i));
+            for(int j = 0; j < ownPiecesPosition.get(i).length; j++) {
+                System.out.println(ownPiecesPosition.get(i)[j]);
+                Board tempBoard = board.clone();
+                List<Integer[]> otherPieces = tempBoard.getAllPieces(!playerIsWhite);
+                List<Integer[]> posibelCatches = new ArrayList<>();
+                for (int k = 0; k < otherPieces.size(); k++) {
+
+                    posibelCatches.add(tempBoard.getPiece(otherPieces.get(k)[0],otherPieces.get(k)[1]).getValidMoves(true));
+
+
+                }
+
+            }
+        }
+
+
+
+
 
 
         //Move all pices and show if an enemy piec can capture the own king

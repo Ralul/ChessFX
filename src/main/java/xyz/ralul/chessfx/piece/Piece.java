@@ -7,7 +7,7 @@ import javafx.scene.image.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Piece {
+public abstract class Piece implements Cloneable {
     private boolean isWhite;
     private int row;
     private int col;
@@ -28,6 +28,10 @@ public abstract class Piece {
         this.isWhite = isWhite;
         this.type = type;
         this.isCatchable = isCatchable;
+    }
+
+    public Piece(Piece that) {
+        
     }
 
     public boolean isWhite() {
@@ -123,5 +127,16 @@ public abstract class Piece {
             }
         }
         return piecesInRange;
+    }
+
+    @Override
+    public Piece clone() {
+        try {
+            Piece clone = (Piece) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

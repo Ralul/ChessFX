@@ -6,7 +6,7 @@ import xyz.ralul.chessfx.GameController;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Pawn extends Piece {
+public class Pawn extends Piece{
 
     public Pawn(boolean isWhite) {
         super(isWhite, ChessPieceType.PAWN, true);
