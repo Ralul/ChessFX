@@ -19,7 +19,7 @@ dependencies {
 mainClassName = 'xyz.ralul.chessfx.Main'
 
 javafx {
-    modules = [ 'javafx.controls', 'javafx.media', 'javafx.graphics']
+    modules = ['javafx.controls', 'javafx.media', 'javafx.graphics']
 }
 
 test {

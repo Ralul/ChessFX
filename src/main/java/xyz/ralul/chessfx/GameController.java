@@ -1,86 +1,33 @@
 package xyz.ralul.chessfx;
 
-import java.util.*;
-
 public class GameController {
-
-    public static Board getBoard() {
-        return board;
-    }
 
     private static Board board;
     private static BoardView boardView;
-
     private static int startRow, startCol;
     private static int endRow, endCol;
-    private static boolean validStartPosition  = false;
+    private static boolean validStartPosition = false;
     private static boolean validEndPosition = false;
     private static boolean playerIsWhite = true;
-
-    private static Map<Integer[],List<Integer[]>> validMoves = new HashMap<Integer[], List<Integer[]>>();
     private static boolean playerBlackIsCheck = false;
     private static boolean playerWhiteIsCheck = false;
+    private static SearchValidMoves searchValidMoves;
 
     public GameController(Board board, BoardView boardView) {
         this.board = board;
         this.boardView = boardView;
         boardView.setCellClickListener(this::hadelCellClick);
         updateView();
+        searchValidMoves = new SearchValidMoves(board);
+        searchValidMoves.updateMoves();
     }
 
-    public static void updateValidMoves() {
+    public static Board getBoard() {
+        return board;
+    }
 
-        /*
-        How to find all valid Moves:
-        1. Find All own pieces
-        2. Calculate all possible moves without considering their legality
-        3. Made All moves on a deep Copy of the board
-        4. Calculate all possible catches for the other player
-        5. If a catch matches with the position of the king the move is not legal
-        */
-
-        validMoves.clear();
-        List<Integer[]> ownPiecesPosition = ownPiecesPosition = board.getAllPieces(playerIsWhite);
-        Map<Integer[] , List<Integer[]>> ownPiecesPositionWithMoves= new HashMap<Integer[], List<Integer[]>>();
-
-        for(int i = 0; i < ownPiecesPosition.size(); i++) {
-            ownPiecesPositionWithMoves.put(ownPiecesPosition.get(i),board.getPiece(ownPiecesPosition.get(i)[0], ownPiecesPosition.get(i)[1]).getValidMoves(false));
-        }
-        for(int i = 0; i < ownPiecesPositionWithMoves.size(); i++) {
-            System.out.println(ownPiecesPositionWithMoves.get(i));
-            for(int j = 0; j < ownPiecesPositionWithMoves.get(i).size(); j++) {
-
-                System.out.println(ownPiecesPositionWithMoves.get(ownPiecesPosition.get(i)).get(j));
-
-                Board tempBoard = board.clone();
-
-                int startRow = ownPiecesPosition.get(j)[0];
-                int startCol = ownPiecesPosition.get(j)[1];
-                int endRow = ownPiecesPositionWithMoves.get(i).get(j)[0];
-                int endCol = ownPiecesPositionWithMoves.get(i).get(j)[1];
-
-                tempBoard.movePiece(startRow, startCol, endRow, endCol);
-
-                List<Integer[]> otherPieces = tempBoard.getAllPieces(!playerIsWhite);
-
-                for (int k = 0; k < otherPieces.size(); k++) {
-                    List<Integer[]> posibelCatches = tempBoard.getPiece(otherPieces.get(k)[0], otherPieces.get(k)[1]).getValidMoves(true);
-                    for(Integer[] posibelCatch : posibelCatches) {
-                        int[] posKing = tempBoard.getKing(playerIsWhite);
-                        if(posKing[0] == posibelCatch[0] && posKing[1] == posibelCatch[1]) {
-                            ownPiecesPositionWithMoves.get(i).remove(j);
-                            break;
-                        }
-                    }
-                }
-                
-            }
-        }
-
-        //Move all pices and show if an enemy piec can capture the own king
-        //But first create an copy of board to perform the move
-
-        validMoves = ownPiecesPositionWithMoves;
+    public static boolean isPlayerIsWhite() {
+        return playerIsWhite;
     }
 
     private void hadelCellClick(int row, int col) {
@@ -91,8 +38,7 @@ public class GameController {
             startCol = col;
             validStartPosition = true;
             System.out.println("GameLogic valid starting position");
-        }
-        else if (validStartPosition) {
+        } else if (validStartPosition) {
             endRow = row;
             endCol = col;
             validEndPosition = true;
@@ -102,20 +48,20 @@ public class GameController {
         if (validEndPosition && validStartPosition) {
             movePiece();
         }
-        int[] kingPos = board.getKing(playerIsWhite);
-        System.out.println("row: "+ kingPos[0]+ "| col: " + kingPos[1]);
+        Position kingPos = board.getKing(playerIsWhite);
+        System.out.println("row: " + kingPos.getRow() + "| col: " + kingPos.getCol());
     }
 
-    private void movePiece(){
-        if (board.getPiece(startRow, startCol).isValidMove(endRow, endCol,false)) {
+    private void movePiece() {
+        if (board.getPiece(startRow, startCol).isValidMove(endRow, endCol, false)) {
             System.out.println("GameLogic valid ending position");
             board.movePiece(startRow, startCol, endRow, endCol);
             validStartPosition = false;
             validEndPosition = false;
             playerIsWhite = !playerIsWhite;
             updateView();
+            searchValidMoves.updateMoves();
 
-            updateValidMoves();
         }
     }
 

@@ -1,10 +1,10 @@
 package xyz.ralul.chessfx.piece;
 
-import xyz.ralul.chessfx.ChessPieceType;
+import xyz.ralul.chessfx.Position;
 
 import java.util.List;
 
-public class Knight extends Piece {
+public class Knight extends Piece implements Cloneable{
 
     private int[][] directions = {{2, 1}, {2, -1}, {-2, 1}, {-2, -1}, {1, 2}, {-1, 2}, {1, -2}, {-1, -2}};
 
@@ -13,9 +13,15 @@ public class Knight extends Piece {
     }
 
     @Override
-    public List<Integer[]> getValidMoves(boolean kingIsCapture) {
-        List<Integer[]> PiecesInRange = getMovesByDirections(directions, false, kingIsCapture);
+    public List<Position> getValidMoves(boolean kingIsCapture) {
+        List<Position> PiecesInRange = getMovesByDirections(directions, false, kingIsCapture);
 
         return PiecesInRange;
+    }
+
+    @Override
+    public Knight clone() {
+        Knight clone = (Knight) super.clone();
+        return clone;
     }
 }

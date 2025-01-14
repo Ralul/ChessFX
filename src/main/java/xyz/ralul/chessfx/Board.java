@@ -2,10 +2,11 @@ package xyz.ralul.chessfx;
 
 import xyz.ralul.chessfx.piece.*;
 
+import java.lang.ref.Cleaner;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Board implements Cloneable {
+public class Board implements Cloneable, Cleaner.Cleanable {
     private Piece[][] board = new Piece[8][8];
 
     public Piece getPiece(int row, int col) {
@@ -17,7 +18,7 @@ public class Board implements Cloneable {
 
     public void setPiece(int row, int col, Piece piece) {
         board[row][col] = piece;
-        if(piece != null) {
+        if (piece != null) {
             piece.setRow(row);
             piece.setCol(col);
         }
@@ -32,12 +33,12 @@ public class Board implements Cloneable {
 
     }
 
-    public int[] getKing(boolean isWhite) {
+    public Position getKing(boolean isWhite) {
         for (int row = 0; row < board.length; row++) {
             for (int col = 0; col < board[row].length; col++) {
                 if (getPiece(row, col) != null) {
                     if (getPiece(row, col).isWhite() == isWhite && getPiece(row, col).getType() == ChessPieceType.KING) {
-                        return new int[]{row, col};
+                        return new Position(row, col);
                     }
                 }
             }
@@ -45,21 +46,20 @@ public class Board implements Cloneable {
         return null;
     }
 
-    public List<Integer[]> getAllPieces(boolean isWhite) {
-        List<Integer[]> allPieces = new ArrayList<Integer[]>();
+    public List<Position> getAllPieces(boolean isWhite) {
+        List<Position> allPieces = new ArrayList<>();
 
         for (int row = 0; row < board.length; row++) {
             for (int col = 0; col < board[row].length; col++) {
                 if (getPiece(row, col) != null) {
                     if (getPiece(row, col).isWhite() == isWhite) {
-                        allPieces.add(new Integer[]{row, col});
+                        allPieces.add(new Position(row, col));
                     }
                 }
             }
         }
         return allPieces;
     }
-
 
     public void loadFen(String fen) {
         String[] fenParts = fen.split("/");
@@ -122,17 +122,23 @@ public class Board implements Cloneable {
     @Override
     public Board clone() {
         try {
-            Board clone = (Board) super.clone();
-            for(int row = 0; row < 8; row++) {
-                for(int col = 0; col < 8; col++) {
-                    if (getPiece(row, col) != null) {
-                        clone.board[row][col] = (Piece) board[row][col].clone();
+            Board boardClone = (Board) super.clone();
+            boardClone.board = new Piece[8][8];
+            for (int row = 0; row < 8; row++) {
+                for (int col = 0; col < 8; col++) {
+                    if (this.board[row][col] != null) {
+                        boardClone.board[row][col] = this.board[row][col].clone();
                     }
                 }
             }
-            return clone;
+            return boardClone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
+    }
+
+    @Override
+    public void clean() {
+        this.board = new Piece[8][8];
     }
 }
