@@ -15,7 +15,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         Board board = new Board();
         BoardView boardView = new BoardView();
-        board.loadFen("8/1k4p1/8/8/8/8/1Q3K2/8");
+        board.loadFen("7k/8/8/8/8/8/pp3P2/K7");
 
         GameController controller = new GameController(board, boardView);
 

@@ -1,18 +1,19 @@
 package xyz.ralul.chessfx;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class SearchValidMoves {
 
-    private Map<Position, List<Position>> validMoves = new HashMap<>();
+    private Map<Position, List<Position>> validEnds = new HashMap<>();
+    private List<Position> validStarts = new ArrayList<>();
     private Board board;
     private Board tempBoard;
 
     public SearchValidMoves(Board board) {
         this.board = board;
-        this.validMoves = validMoves;
     }
 
     public void updateMoves() {
@@ -26,18 +27,14 @@ public class SearchValidMoves {
         */
 
         boolean playerIsWhite = GameController.isPlayerIsWhite();
-        validMoves.clear();
-        List<Position> ownPiecesPosition =  board.getAllPieces(playerIsWhite);
+        List<Position> ownPiecesPosition = board.getAllPieces(playerIsWhite);
         Map<Position, List<Position>> ownPiecesPositionWithMoves = new HashMap<>();
 
         for (int i = 0; i < ownPiecesPosition.size(); i++) {
-            ownPiecesPositionWithMoves.put(ownPiecesPosition.get(i),board.getPiece(ownPiecesPosition.get(i).getRow(),ownPiecesPosition.get(i).getCol()).getValidMoves(false));
+            ownPiecesPositionWithMoves.put(ownPiecesPosition.get(i), board.getPiece(ownPiecesPosition.get(i).getRow(), ownPiecesPosition.get(i).getCol()).getValidMoves(false));
         }
-        for (int i = 0; i < ownPiecesPositionWithMoves.size(); i++) {
-            System.out.println(ownPiecesPositionWithMoves.get(ownPiecesPosition.get(i)));
-            for (int j = 0; j < ownPiecesPositionWithMoves.get(ownPiecesPosition.get(i)).size(); j++) {
-
-                System.out.println(ownPiecesPositionWithMoves.get(ownPiecesPosition.get(i)).get(j));
+        for (int i = ownPiecesPositionWithMoves.size()-1; i > 0 ; i--) {
+            for (int j = ownPiecesPositionWithMoves.get(ownPiecesPosition.get(i)).size()-1; j > 0 ; j--) {
 
                 tempBoard = board.clone();
 
@@ -48,15 +45,16 @@ public class SearchValidMoves {
 
                 tempBoard.movePiece(startRow, startCol, endRow, endCol);
 
-
                 List<Position> otherPieces = tempBoard.getAllPieces(!playerIsWhite);
 
                 for (int k = 0; k < otherPieces.size(); k++) {
                     List<Position> posibelCatches = tempBoard.getPiece(otherPieces.get(k).getRow(), otherPieces.get(k).getCol()).getValidMoves(true);
+                    Position posKing = tempBoard.getKing(playerIsWhite);
                     for (Position position : posibelCatches) {
-                        Position posKing = tempBoard.getKing(playerIsWhite);
-                        if (posKing.getRow() == position.getRow() && posKing.getCol() == position.getCol()) {
-                            ownPiecesPositionWithMoves.get(ownPiecesPosition.get(k)).remove(j);
+                        if (position.equals(posKing)) {
+
+                            ownPiecesPositionWithMoves.get(ownPiecesPosition.get(i)).remove(j);
+
                             break;
                         }
                     }
@@ -65,9 +63,23 @@ public class SearchValidMoves {
             }
         }
 
-        //Move all pices and show if an enemy piec can capture the own king
-        //But first create an copy of board to perform the move
+        validStarts.clear();
+        validStarts = ownPiecesPosition;
+        validEnds.clear();
+        validEnds = ownPiecesPositionWithMoves;
+        printMoves();
+    }
+    public void printMoves() {
+        for(int i = 0; i < validStarts.size(); i++) {
+            for(int j = 0; j < validEnds.get(validStarts.get(i)).size(); j++) {
+                int startRow = validStarts.get(i).getRow();
+                int startCol = validStarts.get(i).getCol();
+                int endRow = validEnds.get(validStarts.get(i)).get(j).getRow();
+                int endCol = validEnds.get(validStarts.get(i)).get(j).getCol();
 
-        validMoves = ownPiecesPositionWithMoves;
+                System.out.println("Start Row: " + startRow + "| Start Col: " + startCol + "| End   Row: " + endRow + "| End   Col: " + endCol);
+
+            }
+        }
     }
 }

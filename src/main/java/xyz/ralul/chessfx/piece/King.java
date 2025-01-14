@@ -14,7 +14,7 @@ public class King extends Piece implements Cloneable{
 
     @Override
     public List<Position> getValidMoves(boolean kingIsCapture) {
-        List<Position> PiecesInRange = getMovesByDirections(directions, true, kingIsCapture);
+        List<Position> PiecesInRange = getMovesByDirections(directions, false, kingIsCapture);
 
         return PiecesInRange;
     }
