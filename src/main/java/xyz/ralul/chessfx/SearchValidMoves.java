@@ -44,17 +44,18 @@ public class SearchValidMoves {
                 int endCol = ownPiecesPositionWithMoves.get(ownPiecesPosition.get(i)).get(j).getCol();
 
                 tempBoard.movePiece(startRow, startCol, endRow, endCol);
+                tempBoard.printBoard();
 
                 List<Position> otherPieces = tempBoard.getAllPieces(!playerIsWhite);
 
                 for (int k = 0; k < otherPieces.size(); k++) {
-                    List<Position> posibelCatches = tempBoard.getPiece(otherPieces.get(k).getRow(), otherPieces.get(k).getCol()).getValidMoves(true);
+                    List<Position> possibleCatches = tempBoard.getPiece(otherPieces.get(k).getRow(), otherPieces.get(k).getCol()).getValidMoves(true);
                     Position posKing = tempBoard.getKing(playerIsWhite);
-                    for (Position position : posibelCatches) {
+                    for (Position position : possibleCatches) {
                         if (position.equals(posKing)) {
 
                             ownPiecesPositionWithMoves.get(ownPiecesPosition.get(i)).remove(j);
-
+                            System.out.println("ilegal move");
                             break;
                         }
                     }

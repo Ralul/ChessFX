@@ -119,6 +119,54 @@ public class Board implements Cloneable, Cleaner.Cleanable {
         }
     }
 
+    public void printBoard() {
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                Piece piece = getPiece(row, col);
+                if (piece == null) {
+                    System.out.print("*");
+                } else if (piece.getType() == ChessPieceType.PAWN) {
+                    if(piece.isWhite()) {
+                        System.out.print("p");
+                    }else {
+                        System.out.print("P");
+                    }
+                } else if (piece.getType() == ChessPieceType.KING) {
+                    if(piece.isWhite()) {
+                        System.out.print("k");
+                    } else {
+                        System.out.print("K");
+                    }
+                } else if (piece.getType() == ChessPieceType.QUEEN) {
+                    if(piece.isWhite()) {
+                        System.out.print("q");
+                    }else {
+                        System.out.print("Q");
+                    }
+                } else if (piece.getType() == ChessPieceType.BISHOP) {
+                    if(piece.isWhite()) {
+                        System.out.print("b");
+                    } else {
+                        System.out.print("B");
+                    }
+                } else if (piece.getType() == ChessPieceType.KNIGHT) {
+                    if(piece.isWhite()) {
+                        System.out.print("n");
+                    } else {
+                        System.out.print("N");
+                    }
+                } else if (piece.getType() == ChessPieceType.ROOK) {
+                    if(piece.isWhite()) {
+                        System.out.print("r");
+                    } else {
+                        System.out.print("R");
+                    }
+                }
+            }
+            System.out.println();
+        }
+    }
+
     @Override
     public Board clone() {
         try {
