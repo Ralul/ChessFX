@@ -24,7 +24,6 @@ public class GameController {
     public GameController(Board board, BoardView boardView) {
         this.board = board;
         this.boardView = boardView;
-
         boardView.setCellClickListener(this::hadelCellClick);
         updateView();
     }
@@ -41,7 +40,6 @@ public class GameController {
         */
 
         validMoves.clear();
-        int[] posKing = board.getKing(playerIsWhite);
         List<Integer[]> ownPiecesPosition = ownPiecesPosition = board.getAllPieces(playerIsWhite);
         Map<Integer[] , List<Integer[]>> ownPiecesPositionWithMoves= new HashMap<Integer[], List<Integer[]>>();
 
@@ -51,7 +49,9 @@ public class GameController {
         for(int i = 0; i < ownPiecesPositionWithMoves.size(); i++) {
             System.out.println(ownPiecesPositionWithMoves.get(i));
             for(int j = 0; j < ownPiecesPositionWithMoves.get(i).size(); j++) {
-                System.out.println(Arrays.toString(ownPiecesPositionWithMoves.get(i).get(j)));
+
+                System.out.println(ownPiecesPositionWithMoves.get(ownPiecesPosition.get(i)).get(j));
+
                 Board tempBoard = board.clone();
 
                 int startRow = ownPiecesPosition.get(j)[0];
@@ -66,6 +66,7 @@ public class GameController {
                 for (int k = 0; k < otherPieces.size(); k++) {
                     List<Integer[]> posibelCatches = tempBoard.getPiece(otherPieces.get(k)[0], otherPieces.get(k)[1]).getValidMoves(true);
                     for(Integer[] posibelCatch : posibelCatches) {
+                        int[] posKing = tempBoard.getKing(playerIsWhite);
                         if(posKing[0] == posibelCatch[0] && posKing[1] == posibelCatch[1]) {
                             ownPiecesPositionWithMoves.get(i).remove(j);
                             break;
@@ -112,9 +113,9 @@ public class GameController {
             validStartPosition = false;
             validEndPosition = false;
             playerIsWhite = !playerIsWhite;
+            updateView();
 
             updateValidMoves();
-            updateView();
         }
     }
 
