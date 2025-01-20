@@ -9,8 +9,8 @@ public class GameController {
 
     private static Board board;
     private static BoardView boardView;
-    private Position startPosition;
-    private Position endPosition;
+    private static Position startPosition;
+    private static Position endPosition;
     private static boolean validStartPosition = false;
     private static boolean validEndPosition = false;
     private static boolean playerIsWhite = true;

@@ -9,8 +9,11 @@ public class SearchValidMoves {
 
     private Map<Position, List<Position>> validEnds = new HashMap<>();
     private List<Position> validStarts = new ArrayList<>();
+
+    private List<Move> validMoves = new ArrayList<>();
     private Board board;
     private Board tempBoard;
+
 
     public SearchValidMoves(Board board, Map<Position, List<Position>> validEnds, List<Position> validStarts) {
         this.board = board;
@@ -31,6 +34,7 @@ public class SearchValidMoves {
         Map<Position, List<Position>> ownEndPositions = new HashMap<>();
 
         for (int i = 0; i < ownStartPositions.size(); i++) {
+            
 
 
             ownEndPositions.put(ownStartPositions.get(i), board.getPiece(ownStartPositions.get(i).getRow(), ownStartPositions.get(i).getCol()).getValidMoves(false));
