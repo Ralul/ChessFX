@@ -2,6 +2,7 @@ package xyz.ralul.chessfx.piece;
 
 import javafx.scene.image.ImageView;
 import xyz.ralul.chessfx.GameController;
+import xyz.ralul.chessfx.Move;
 import xyz.ralul.chessfx.Position;
 
 import java.util.ArrayList;
@@ -11,14 +12,17 @@ public abstract class Piece implements Cloneable {
     private boolean isWhite;
     private int row;
     private int col;
+    private List<Move> moves;
     private ChessPieceType type;
     private boolean isCatchable;
     private boolean isMoved;
+    private int[][] directions;
 
-    public Piece(boolean isWhite, ChessPieceType type, boolean isCatchable) {
+    public Piece(boolean isWhite, ChessPieceType type, boolean isCatchable, int[][] directions) {
         this.isWhite = isWhite;
         this.type = type;
         this.isCatchable = isCatchable;
+        this.directions = directions;
     }
 
     public boolean isMoved() {
@@ -96,7 +100,7 @@ public abstract class Piece implements Cloneable {
         return false;
     }
 
-    public List<Position> getMovesByDirections(int[][] directions, boolean isSliding, boolean kingIsCapture) {
+    public List<Position> getMovesByDirections(boolean isSliding, boolean kingIsCapture) {
         List<Position> piecesInRange = new ArrayList<>();
         int startRow = getRow();
         int startCol = getCol();

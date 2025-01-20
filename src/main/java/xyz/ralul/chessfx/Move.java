@@ -11,20 +11,11 @@ public class Move {
     }
 
     private MoveType moveType;
-    private Position from;
     private Position to;
 
-    public Move(Position from, Position to, MoveType moveType) {
+    public Move(Position to, MoveType moveType) {
         this.to = to;
         this.moveType = moveType;
-    }
-
-    public Position getFrom() {
-        return from;
-    }
-
-    public void setFrom(Position from) {
-        this.from = from;
     }
 
     public Position getTo() {
