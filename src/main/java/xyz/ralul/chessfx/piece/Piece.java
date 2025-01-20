@@ -114,7 +114,8 @@ public abstract class Piece implements Cloneable {
                     break;
                 }
 
-                Piece targetPiece = GameController.getBoard().getPiece(currentRow, currentCol);
+                Piece targetPiece = GameController.getBoard().getPiece(new Position(currentRow, currentCol));
+
                 if (targetPiece == null || targetPiece.isCatchbleBy(this, kingIsCapture)) {
                     piecesInRange.add(new Position(currentRow, currentCol));
                 } else {

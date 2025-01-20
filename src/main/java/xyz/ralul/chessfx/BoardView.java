@@ -19,12 +19,12 @@ public class BoardView {
         boolean color = true;
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
-                StackPane cell = createCell(color, board.getPiece(row, col));
+                StackPane cell = createCell(color, board.getPiece(new Position(row,col)));
                 int finalRow = row;
                 int finalCol = col;
                 cell.setOnMouseClicked(e -> {
                     if (listener != null) {
-                        listener.onCellClick(finalRow, finalCol);
+                        listener.onCellClick(new Position(finalRow,finalCol));
                     }
                 });
                 gridPane.add(cell, col, row);
@@ -52,6 +52,6 @@ public class BoardView {
     }
 
     public interface CellClickListener {
-        void onCellClick(int row, int col);
+        void onCellClick(Position position);
     }
 }

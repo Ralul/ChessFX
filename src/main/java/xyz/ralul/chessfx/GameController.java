@@ -1,11 +1,16 @@
 package xyz.ralul.chessfx;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class GameController {
 
     private static Board board;
     private static BoardView boardView;
-    private static int startRow, startCol;
-    private static int endRow, endCol;
+    private Position startPosition;
+    private Position endPosition;
     private static boolean validStartPosition = false;
     private static boolean validEndPosition = false;
     private static boolean playerIsWhite = true;
@@ -13,12 +18,15 @@ public class GameController {
     private static boolean playerWhiteIsCheck = false;
     private static SearchValidMoves searchValidMoves;
 
+    private Map<Position, List<Position>> validEnds = new HashMap<>();
+    private List<Position> validStarts = new ArrayList<>();
+
     public GameController(Board board, BoardView boardView) {
         this.board = board;
         this.boardView = boardView;
         boardView.setCellClickListener(this::hadelCellClick);
         updateView();
-        searchValidMoves = new SearchValidMoves(board);
+        searchValidMoves = new SearchValidMoves(board, validEnds, validStarts);
         searchValidMoves.updateMoves();
     }
 
@@ -30,39 +38,36 @@ public class GameController {
         return playerIsWhite;
     }
 
-    private void hadelCellClick(int row, int col) {
-        System.out.println("Piece clicked at: " + row + ", " + col);
+    private void hadelCellClick(Position position) {
 
-        if ((board.getPiece(row, col) != null) && board.getPiece(row, col).isWhite() == playerIsWhite) {
-            startRow = row;
-            startCol = col;
+        System.out.println("Piece clicked at: " + position.getRow() + ", " + position.getCol());
+
+        if ((board.getPiece(position) != null) && board.getPiece(position).isWhite() == playerIsWhite) {
+            startPosition = position;
             validStartPosition = true;
             System.out.println("GameLogic valid starting position");
         } else if (validStartPosition) {
-            endRow = row;
-            endCol = col;
+            endPosition = position;
             validEndPosition = true;
             System.out.println("GameLogic valid ending position");
         }
 
         if (validEndPosition && validStartPosition) {
-            movePiece();
+            if(searchValidMoves.isMoveValid(startPosition, endPosition)) {
+                movePiece();
+            }
         }
         Position kingPos = board.getKing(playerIsWhite);
         System.out.println("row: " + kingPos.getRow() + "| col: " + kingPos.getCol());
     }
 
     private void movePiece() {
-        if (board.getPiece(startRow, startCol).isValidMove(endRow, endCol, false)) {
-            System.out.println("GameLogic valid ending position");
-            board.movePiece(startRow, startCol, endRow, endCol);
-            validStartPosition = false;
-            validEndPosition = false;
-            playerIsWhite = !playerIsWhite;
-            updateView();
-            searchValidMoves.updateMoves();
-
-        }
+        board.movePiece(startPosition, endPosition);
+        validStartPosition = false;
+        validEndPosition = false;
+        playerIsWhite = !playerIsWhite;
+        updateView();
+        searchValidMoves.updateMoves();
     }
 
     private void updateView() {

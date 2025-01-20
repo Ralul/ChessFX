@@ -15,7 +15,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         Board board = new Board();
         BoardView boardView = new BoardView();
-        board.loadFen("7k/8/8/8/8/8/pp3P2/K7");
+        board.loadFen("1q5R/8/4k3/8/8/8/1K6/8");
 
         GameController controller = new GameController(board, boardView);
 
@@ -23,5 +23,4 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.show();
     }
-
 }

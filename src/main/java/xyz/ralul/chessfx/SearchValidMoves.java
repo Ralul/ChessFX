@@ -12,7 +12,7 @@ public class SearchValidMoves {
     private Board board;
     private Board tempBoard;
 
-    public SearchValidMoves(Board board) {
+    public SearchValidMoves(Board board, Map<Position, List<Position>> validEnds, List<Position> validStarts) {
         this.board = board;
     }
 
@@ -27,23 +27,20 @@ public class SearchValidMoves {
         */
 
         boolean playerIsWhite = GameController.isPlayerIsWhite();
-        List<Position> ownPiecesPosition = board.getAllPieces(playerIsWhite);
-        Map<Position, List<Position>> ownPiecesPositionWithMoves = new HashMap<>();
+        List<Position> ownStartPositions = board.getAllPieces(playerIsWhite);
+        Map<Position, List<Position>> ownEndPositions = new HashMap<>();
 
-        for (int i = 0; i < ownPiecesPosition.size(); i++) {
-            ownPiecesPositionWithMoves.put(ownPiecesPosition.get(i), board.getPiece(ownPiecesPosition.get(i).getRow(), ownPiecesPosition.get(i).getCol()).getValidMoves(false));
+        for (int i = 0; i < ownStartPositions.size(); i++) {
+
+
+            ownEndPositions.put(ownStartPositions.get(i), board.getPiece(ownStartPositions.get(i).getRow(), ownStartPositions.get(i).getCol()).getValidMoves(false));
         }
-        for (int i = ownPiecesPositionWithMoves.size()-1; i > 0 ; i--) {
-            for (int j = ownPiecesPositionWithMoves.get(ownPiecesPosition.get(i)).size()-1; j > 0 ; j--) {
+        for (int i = ownEndPositions.size()-1; i >= 0 ; i--) {
+            for (int j = ownEndPositions.get(ownStartPositions.get(i)).size()-1; j >= 0 ; j--) {
 
                 tempBoard = board.clone();
 
-                int startRow = ownPiecesPosition.get(i).getRow();
-                int startCol = ownPiecesPosition.get(i).getCol();
-                int endRow = ownPiecesPositionWithMoves.get(ownPiecesPosition.get(i)).get(j).getRow();
-                int endCol = ownPiecesPositionWithMoves.get(ownPiecesPosition.get(i)).get(j).getCol();
-
-                tempBoard.movePiece(startRow, startCol, endRow, endCol);
+                tempBoard.movePiece(ownStartPositions.get(i),ownEndPositions.get(ownStartPositions.get(i)).get(j));
                 tempBoard.printBoard();
 
                 List<Position> otherPieces = tempBoard.getAllPieces(!playerIsWhite);
@@ -54,7 +51,7 @@ public class SearchValidMoves {
                     for (Position position : possibleCatches) {
                         if (position.equals(posKing)) {
 
-                            ownPiecesPositionWithMoves.get(ownPiecesPosition.get(i)).remove(j);
+                            ownEndPositions.get(ownStartPositions.get(i)).remove(j);
                             System.out.println("ilegal move");
                             break;
                         }
@@ -65,9 +62,9 @@ public class SearchValidMoves {
         }
 
         validStarts.clear();
-        validStarts = ownPiecesPosition;
+        validStarts = ownStartPositions;
         validEnds.clear();
-        validEnds = ownPiecesPositionWithMoves;
+        validEnds = ownEndPositions;
         printMoves();
     }
     public void printMoves() {
@@ -77,10 +74,20 @@ public class SearchValidMoves {
                 int startCol = validStarts.get(i).getCol();
                 int endRow = validEnds.get(validStarts.get(i)).get(j).getRow();
                 int endCol = validEnds.get(validStarts.get(i)).get(j).getCol();
-
                 System.out.println("Start Row: " + startRow + "| Start Col: " + startCol + "| End   Row: " + endRow + "| End   Col: " + endCol);
-
             }
         }
+    }
+    public boolean isMoveValid(Position start, Position end) {
+        for(Position validStart : validStarts) {
+            if (validStart.equals(start)) {
+                for(Position validEnd : validEnds.get(validStart)) {
+                    if (validEnd.equals(end)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
