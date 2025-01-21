@@ -7,7 +7,8 @@ public class Move {
         CAPTURE,
         CASTLING,
         EN_PASSANT,
-        PROMOTION
+        PROMOTION,
+        KING_CAPTURE
     }
 
     private MoveType moveType;

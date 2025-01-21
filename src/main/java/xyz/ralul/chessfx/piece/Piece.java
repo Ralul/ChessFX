@@ -10,19 +10,28 @@ import java.util.List;
 
 public abstract class Piece implements Cloneable {
     private boolean isWhite;
-    private int row;
-    private int col;
-    private List<Move> moves;
+    protected int row;
+    protected int col;
+    protected List<Move> moves;
     private ChessPieceType type;
     private boolean isCatchable;
     private boolean isMoved;
     private int[][] directions;
+    private boolean isSliding;
 
-    public Piece(boolean isWhite, ChessPieceType type, boolean isCatchable, int[][] directions) {
+    public Piece(boolean isWhite, ChessPieceType type, boolean isCatchable, int[][] directions, boolean isSliding) {
         this.isWhite = isWhite;
         this.type = type;
         this.isCatchable = isCatchable;
         this.directions = directions;
+        this.isSliding = isSliding;
+    }
+
+    public Piece(boolean isWhite, ChessPieceType type, boolean isCatchable, boolean isSliding) {
+        this.isWhite = isWhite;
+        this.type = type;
+        this.isCatchable = isCatchable;
+        this.isSliding = isSliding;
     }
 
     public boolean isMoved() {
@@ -76,16 +85,6 @@ public abstract class Piece implements Cloneable {
 
     public abstract List<Position> getValidMoves(boolean kingIsCapture);
 
-    public boolean isValidMove(int row, int col, boolean kingIsCapture) {
-        List<Position> validMoves = getValidMoves(kingIsCapture);
-
-        for (int i = 0; i < validMoves.size(); i++) {
-            if (validMoves.get(i).getRow() == row && validMoves.get(i).getCol() == col) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public boolean isCatchbleBy(Piece opponent, boolean kingIsCapture) {
         if (opponent == null) {
@@ -98,6 +97,39 @@ public abstract class Piece implements Cloneable {
             return isCatchable;
         }
         return false;
+    }
+
+    public void updateMoves() {
+        moves.clear();
+        for (int[] direction : directions) {
+            int currentRow = row;
+            int currentCol = col;
+
+            while (true) {
+                currentRow += direction[0];
+                currentCol += direction[1];
+
+                if (currentRow < 0 || currentRow >= 8 || currentCol < 0 || currentCol >= 8) {
+                    break;
+                }
+
+                Piece targetPiece = GameController.getBoard().getPiece(new Position(currentRow, currentCol));
+
+                if (targetPiece == null) {
+                    moves.add(new Move(new Position(currentRow, currentCol), Move.MoveType.NORMAL));
+                } else if (targetPiece.isCatchbleBy(this, true)) {
+                    moves.add(new Move(new Position(currentRow, currentCol), Move.MoveType.CAPTURE));
+                } else if (targetPiece.isCatchbleBy(this, true)) {
+                    moves.add(new Move(new Position(currentRow, currentCol), Move.MoveType.KING_CAPTURE));
+                } else {
+                    break;
+                }
+
+                if (!isSliding) {
+                    break;
+                }
+            }
+        }
     }
 
     public List<Position> getMovesByDirections(boolean isSliding, boolean kingIsCapture) {

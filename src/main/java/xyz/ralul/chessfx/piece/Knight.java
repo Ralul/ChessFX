@@ -8,7 +8,7 @@ public class Knight extends Piece implements Cloneable{
     static final int[][] DIRECTIONS = {{2, 1}, {2, -1}, {-2, 1}, {-2, -1}, {1, 2}, {-1, 2}, {1, -2}, {-1, -2}};
 
     public Knight(boolean isWhite) {
-        super(isWhite, ChessPieceType.KNIGHT, true, DIRECTIONS);
+        super(isWhite, ChessPieceType.KNIGHT, true, DIRECTIONS,false);
     }
 
     @Override

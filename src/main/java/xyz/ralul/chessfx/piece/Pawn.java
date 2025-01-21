@@ -1,6 +1,7 @@
 package xyz.ralul.chessfx.piece;
 
 import xyz.ralul.chessfx.GameController;
+import xyz.ralul.chessfx.Move;
 import xyz.ralul.chessfx.Position;
 
 import java.util.ArrayList;
@@ -9,7 +10,17 @@ import java.util.List;
 public class Pawn extends Piece implements Cloneable {
 
     public Pawn(boolean isWhite) {
-        super(isWhite, ChessPieceType.PAWN, true);
+        super(isWhite, ChessPieceType.PAWN, true,false);
+    }
+
+
+    public void updateMoves() {
+        moves.clear();
+        int rowDirection = this.isWhite() ? -1 : 1;
+
+        if (GameController.getBoard().getPiece(row,rowDirection) == null) {
+            moves.add(new Move())
+        }
     }
 
     @Override
