@@ -1,6 +1,6 @@
 package xyz.ralul.chessfx;
 
-public class Move {
+public class Move implements Cloneable {
 
     public enum MoveType {
         NORMAL,
@@ -8,7 +8,8 @@ public class Move {
         CASTLING,
         EN_PASSANT,
         PROMOTION,
-        KING_CAPTURE
+        KING_CAPTURE,
+        PAWN_SPRINT
     }
 
     private MoveType moveType;
@@ -33,5 +34,16 @@ public class Move {
 
     public void setMoveType(MoveType moveType) {
         this.moveType = moveType;
+    }
+
+    @Override
+    public Move clone() {
+        try {
+            Move clone = (Move) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

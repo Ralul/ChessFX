@@ -34,7 +34,6 @@ public class SearchValidMoves {
         Map<Position, List<Position>> ownEndPositions = new HashMap<>();
 
         for (int i = 0; i < ownStartPositions.size(); i++) {
-
             ownEndPositions.put(ownStartPositions.get(i), board.getPiece(ownStartPositions.get(i).getRow(), ownStartPositions.get(i).getCol()).getValidMoves(false));
         }
         for (int i = ownEndPositions.size()-1; i >= 0 ; i--) {
