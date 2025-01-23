@@ -24,8 +24,7 @@ public class Board implements Cloneable, Cleaner.Cleanable {
     public void setPiece(Position position, Piece piece) {
         board[position.getRow()][position.getCol()] = piece;
         if (piece != null) {
-            piece.setRow(position.getRow());
-            piece.setCol(position.getCol());
+            piece.setPosition(new Position(position.getRow(), position.getCol()));
         }
     }
 
@@ -171,19 +170,6 @@ public class Board implements Cloneable, Cleaner.Cleanable {
         }
         System.out.println();
     }
-
-
-    public void updateMoves() {
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
-                if (board[row][col] != null) {
-                    board[row][col].updateMoves();
-                }
-            }
-        }
-    }
-
-    public 
 
     @Override
     public Board clone() {

@@ -6,15 +6,15 @@ import java.util.List;
 
 public class Bishop extends Piece implements Cloneable {
 
-    static final int[][] DIRECTIONS = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+    private int[][] directions = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}}; // Diagonal directions
 
     public Bishop(boolean isWhite) {
-        super(isWhite, ChessPieceType.BISHOP, true,DIRECTIONS,true);
+        super(isWhite, ChessPieceType.BISHOP, true);
     }
 
     @Override
     public List<Position> getValidMoves(boolean kingIsCapture) {
-        List<Position> PiecesInRange = getMovesByDirections(true, kingIsCapture);
+        List<Position> PiecesInRange = getMovesByDirections(directions, true, kingIsCapture);
 
         return PiecesInRange;
     }

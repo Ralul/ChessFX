@@ -18,15 +18,14 @@ public class GameController {
     private static boolean playerWhiteIsCheck = false;
     private static SearchValidMoves searchValidMoves;
 
+    private Map<Position, List<Position>> validEnds = new HashMap<>();
+    private List<Position> validStarts = new ArrayList<>();
+
     public GameController(Board board, BoardView boardView) {
         this.board = board;
         this.boardView = boardView;
         boardView.setCellClickListener(this::hadelCellClick);
         updateView();
-        board.updateMoves();
-
-
-
         searchValidMoves = new SearchValidMoves(board, validEnds, validStarts);
         searchValidMoves.updateMoves();
     }

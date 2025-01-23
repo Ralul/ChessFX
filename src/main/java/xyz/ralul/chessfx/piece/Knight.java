@@ -5,15 +5,16 @@ import xyz.ralul.chessfx.Position;
 import java.util.List;
 
 public class Knight extends Piece implements Cloneable{
-    static final int[][] DIRECTIONS = {{2, 1}, {2, -1}, {-2, 1}, {-2, -1}, {1, 2}, {-1, 2}, {1, -2}, {-1, -2}};
+
+    private int[][] directions = {{2, 1}, {2, -1}, {-2, 1}, {-2, -1}, {1, 2}, {-1, 2}, {1, -2}, {-1, -2}};
 
     public Knight(boolean isWhite) {
-        super(isWhite, ChessPieceType.KNIGHT, true, DIRECTIONS,false);
+        super(isWhite, ChessPieceType.KNIGHT, true);
     }
 
     @Override
     public List<Position> getValidMoves(boolean kingIsCapture) {
-        List<Position> PiecesInRange = getMovesByDirections(false, kingIsCapture);
+        List<Position> PiecesInRange = getMovesByDirections(directions, false, kingIsCapture);
 
         return PiecesInRange;
     }

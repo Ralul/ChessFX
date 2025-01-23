@@ -2,35 +2,22 @@ package xyz.ralul.chessfx.piece;
 
 import javafx.scene.image.ImageView;
 import xyz.ralul.chessfx.GameController;
-import xyz.ralul.chessfx.Move;
 import xyz.ralul.chessfx.Position;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Piece implements Cloneable {
     protected boolean isWhite;
-    protected int row;
-    protected int col;
-    protected List<Move> moves;
+    protected Position position;
     protected ChessPieceType type;
     protected boolean isCatchable;
     protected boolean isMoved;
-    protected int[][] directions;
-    protected boolean isSliding;
 
-    public Piece(boolean isWhite, ChessPieceType type, boolean isCatchable, int[][] directions, boolean isSliding) {
+    public Piece(boolean isWhite, ChessPieceType type, boolean isCatchable) {
         this.isWhite = isWhite;
         this.type = type;
         this.isCatchable = isCatchable;
-        this.directions = directions;
-        this.isSliding = isSliding;
-    }
-
-    public Piece(boolean isWhite, ChessPieceType type, boolean isCatchable, boolean isSliding) {
-        this.isWhite = isWhite;
-        this.type = type;
-        this.isCatchable = isCatchable;
-        this.isSliding = isSliding;
     }
 
     public boolean isMoved() {
@@ -49,25 +36,12 @@ public abstract class Piece implements Cloneable {
         isWhite = white;
     }
 
-    public int getRow() {
-        return row;
+    public Position getPosition() {
+        return position;
     }
 
-    public void setRow(int row) {
-        this.row = row;
-    }
-
-    public int getCol() {
-        return col;
-    }
-
-    public void setCol(int col) {
-        this.col = col;
-    }
-
-    public void setPos(int row, int col) {
-        this.row = row;
-        this.col = col;
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     public ChessPieceType getType() {
@@ -82,7 +56,20 @@ public abstract class Piece implements Cloneable {
         return getType().getImageView(isWhite);
     }
 
-    public boolean isCatchableBy(Piece opponent, boolean kingIsCapture) {
+    public abstract List<Position> getValidMoves(boolean kingIsCapture);
+
+    public boolean isValidMove(int row, int col, boolean kingIsCapture) {
+        List<Position> validMoves = getValidMoves(kingIsCapture);
+
+        for (int i = 0; i < validMoves.size(); i++) {
+            if (validMoves.get(i).getRow() == row && validMoves.get(i).getCol() == col) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isCatchbleBy(Piece opponent, boolean kingIsCapture) {
         if (opponent == null) {
             return false;
         }
@@ -95,11 +82,15 @@ public abstract class Piece implements Cloneable {
         return false;
     }
 
-    public void updateMoves() {
-        moves.clear();
+    public List<Position> getMovesByDirections(int[][] directions, boolean isSliding, boolean kingIsCapture) {
+        List<Position> piecesInRange = new ArrayList<>();
+        int startRow = position.getRow();
+        int startCol = position.getCol();
+
         for (int[] direction : directions) {
-            int currentRow = row;
-            int currentCol = col;
+            int currentRow = startRow;
+            int currentCol = startCol;
+
 
             while (true) {
                 currentRow += direction[0];
@@ -111,12 +102,8 @@ public abstract class Piece implements Cloneable {
 
                 Piece targetPiece = GameController.getBoard().getPiece(new Position(currentRow, currentCol));
 
-                if (targetPiece == null) {
-                    moves.add(new Move(new Position(currentRow, currentCol), Move.MoveType.NORMAL));
-                } else if (targetPiece.isCatchableBy(this, true)) {
-                    moves.add(new Move(new Position(currentRow, currentCol), Move.MoveType.CAPTURE));
-                } else if (targetPiece.isCatchableBy(this, true)) {
-                    moves.add(new Move(new Position(currentRow, currentCol), Move.MoveType.KING_CAPTURE));
+                if (targetPiece == null || targetPiece.isCatchbleBy(this, kingIsCapture)) {
+                    piecesInRange.add(new Position(currentRow, currentCol));
                 } else {
                     break;
                 }
@@ -126,6 +113,7 @@ public abstract class Piece implements Cloneable {
                 }
             }
         }
+        return piecesInRange;
     }
 
     @Override

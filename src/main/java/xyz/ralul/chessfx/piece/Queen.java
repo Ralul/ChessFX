@@ -6,15 +6,15 @@ import java.util.List;
 
 public class Queen extends Piece implements Cloneable {
 
-    static final int[][] DIRECTIONS = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+    private int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
 
     public Queen(boolean isWhite) {
-        super(isWhite, ChessPieceType.QUEEN, true,DIRECTIONS,true);
+        super(isWhite, ChessPieceType.QUEEN, true);
     }
 
     @Override
     public List<Position> getValidMoves(boolean kingIsCapture) {
-        List<Position> PiecesInRange = getMovesByDirections(true, kingIsCapture);
+        List<Position> PiecesInRange = getMovesByDirections(directions, true, kingIsCapture);
 
         return PiecesInRange;
     }
